@@ -1,0 +1,10 @@
+.profileCircle{
+    height: 50px;
+    width: 50px;
+    /* padding: 10px; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #000000;
+    border-radius: 50px;
+}
