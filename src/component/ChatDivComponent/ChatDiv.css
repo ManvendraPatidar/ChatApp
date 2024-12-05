@@ -1,27 +1,12 @@
 .chatDiv{
     background-color: #D3D3D3;
-    height : 100%;
+    /* background-color: blue; */
+    scroll-snap-type: y mandatory;
+    height : calc(100vh - 150px) ;
+    display: flex;
+    flex-direction: column;
     width: 100%;
     overflow-y: scroll;
     position: relative;
     scrollbar-width: none;
-}
-
-.chatSpace{
-    width: 100%;
-    /* background-color: aqua; */
-    display: flex;
-    justify-content: flex-start;
-
-}
-
-.chatTile{
-    padding: 20px;
-    background-color: #36454F;
-    margin: 15px 10px;
-    max-width: 40%;
-    font-size: 15px;
-    color: white;
-    letter-spacing: 1.25px;
-    line-height: 18px; 
 }

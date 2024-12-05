@@ -3,27 +3,22 @@ import HeaderComponent from '../component/headerComponent/HeaderComponent.jsx';
 
 import ChatDiv from "../component/ChatDivComponent/ChatDiv.jsx";
 import InputSection from "../component/InputSection/InputSection.jsx";
-import LoginModel from "../component/LoginModel/LoginModel.jsx";
-import { useState } from "react";
 
+function ChatScreen(props){
 
-function ChatScreen(){
-  
-  const [showModel, setShowModel] = useState(true);
+  const {userData} = props;
    
+  // console.log(userData);
 
   return (
-        <div  className='parentContainer'>
-              {
-                showModel? <LoginModel showModel={setShowModel} /> : <div className='container'> 
-                <HeaderComponent/>
-                <ChatDiv/>
-                <InputSection/>
+
+                <div className='chatContainer'> 
+                  <HeaderComponent userData={userData}/>
+                    <ChatDiv/>
+                  <InputSection/>
               </div>
-              }
-        </div>
          
   )
 }
 
-export default ChatScreen;
+export default ChatScreen; 

@@ -1,0 +1,37 @@
+.friendListSectionStyle{
+    height: 100%;
+    /* width: 30%; */
+    width: 500px;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+}
+
+
+.friendListStyle{
+    height: calc(100vh - 75px);
+    width: 100%;
+    box-sizing: border-box;
+    padding: 5px;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+}
+
+.friendCardStyle
+{ 
+    height: 70px;
+    margin: 1px 0px;
+    background-color: rgb(75, 91, 104);
+    width: 100%;
+    display: flex;
+    align-items: center;
+    /* justify-content: center; */
+    box-sizing: border-box;
+    padding: 0px 20px;
+    border-radius: 5px;
+    color: white;
+    font-weight: 900;
+     
+
+}
