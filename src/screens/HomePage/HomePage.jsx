@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import "./HomePage.css"
 import ChatScreen from '../ChatScreen'
-import FriendListSection from '../FriendListSection/FriendListSection'
+import SideBarSection from '../SideBarSection/SideBarSection'
 
 import { io } from 'socket.io-client';
 import LoginModel from '../../component/LoginModel/loginModel';
@@ -52,13 +52,13 @@ function HomePage() {
 
     <div className='parentContainer'>
      
-
-      {
-        showLoginModel ?
+      { 
+        // showLoginModel ?
+        true?
              
               <div className="container">
-                  <FriendListSection />
-                  <ChatScreen userData= {userData} />
+                  <SideBarSection />
+                  <ChatScreen userData= {{userName :"Monty", userId: "Monty.122",roomId: "U90"}} />
               </div>
           
 

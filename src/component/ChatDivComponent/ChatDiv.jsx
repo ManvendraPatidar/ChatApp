@@ -4,7 +4,8 @@ import { MyContext, socket } from '../../screens/HomePage/HomePage';
 import ChatTile from '../ChatTileComponent/ChatTile';
 
 function ChatDiv() {
-
+    
+    
 
     const { userData } = useContext(MyContext);
     const [message, setMessage] = useState([]);
@@ -12,9 +13,6 @@ function ChatDiv() {
 
 
         socket.on("roomMessages", (e) => {
-              
-            console.log("roommmm Message s",e)
-            // console.log("this are older mesages ->>", e)
             setMessage(e);
         })
 
