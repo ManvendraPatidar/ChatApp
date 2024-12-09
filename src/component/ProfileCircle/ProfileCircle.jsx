@@ -1,10 +1,12 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import './ProfileCircle.css'
 import "../headerComponent/HeaderComponent.css"
+import { MyContext } from '../../screens/HomePage/HomePage';
 function ProfileCircle({userName}) {
 
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
   
+  const {setUserData} = useContext(MyContext);
   return (
   <div style={{flexDirection: "row" , boxSizing: "border-box", display: 'flex' , alignItems:"center"  , border: "1px solid white" , borderRadius: "50px"}}   onMouseEnter={() => setIsDropdownVisible(true)}
   onMouseLeave={() => setIsDropdownVisible(false)}>
@@ -24,7 +26,12 @@ function ProfileCircle({userName}) {
     <div style={{width: "100%" ,margin: "20px 0px", height: "1px",backgroundColor: "#BABABA"}}></div>
       
       <div style={{fontSize: "20px" }} onClick={()=>{
-        console.log("Remove User from ")
+        // console.log("Remove User from ")
+       
+        setUserData(null);
+        localStorage.clear();
+      
+        // window.location.reload(); 
       }}>Logout</div>
     </div>: <div/>
    }

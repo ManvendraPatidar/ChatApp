@@ -1,0 +1,25 @@
+
+.popUpStyle{
+    height: 100%;
+    width: 100%;
+    background-color: #000000b5;
+    z-index: 1000;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 0px;   
+}
+
+.containerBox{
+
+    height: 200px;
+    width: 300px;
+    background-color: white;
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    
+}

@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import "./ChatTile.css";
-import { MyContext, socket } from '../../screens/HomePage/HomePage';
+import { MyContext} from '../../screens/HomePage/HomePage';
 
 
 function ChatTile(props) {
