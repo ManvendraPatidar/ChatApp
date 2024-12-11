@@ -13,8 +13,9 @@
 
 .containerBox{
 
-    height: 200px;
+    /* height: 200px; */
     width: 300px;
+    padding: 20px 0px ;
     background-color: white;
     border-radius: 20px;
     display: flex;
@@ -22,4 +23,21 @@
     align-items: center;
     flex-direction: column;
     
+}
+
+.friendTile{
+    background-color: aqua;
+    margin: 5px 10px ;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
+}
+
+.inviteFriendListStyle{
+    max-height: 400px;
+    width: 100%;
+    margin: 20px;
+    overflow: scroll;
+    scrollbar-width: none;
 }

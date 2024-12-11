@@ -1,66 +1,51 @@
-import React, { useContext, useEffect, useState } from 'react'
-import './headerComponent.css'
-import ProfileCircle from '../ProfileCircle/ProfileCircle.jsx'
-import { MyContext } from '../../screens/HomePage/HomePage.jsx';
+import React, { useContext, useEffect, useState } from "react";
+import "./headerComponent.css";
+import ProfileCircle from "../ProfileCircle/ProfileCircle.jsx";
+import { MyContext } from "../../screens/HomePage/HomePage.jsx";
 // import { socket } from '../../screens/HomePage/HomePage.jsx';
 
-function HeaderComponent(props) {
-
-  const { userData } = props;
-
+function HeaderComponent() {
   const [members, setMembers] = useState([]);
-  const {setShowPopUp} = useContext(MyContext);
+  const { setShowPopUp, currentChat } = useContext(MyContext);
 
+  const temp = currentChat.id ?? "";
+  console.log("PreFix #100-->", temp);
 
-  // socket.on("roomUsers", (e) => {
-
-  //   const temp = e.filter((i) => {
-  //     return i != userData.userId;
-  //   })
-
-  //   setMembers(temp);
-  // })
-
-  const userName = userData.userName ?? "XX";
-
-  // socket.on("newJoinedUser", (e) => {
-    
-  //   if (members.includes(e) || e == userData.userId) {
-
-  //   }
-  //   else {
-
-
-  //     const tempArray = [...members];
-
-  //     tempArray.push(e);
-
-  //     setMembers(tempArray);
-
-
-  //   }
-
-  // })
+  const prefixChatname = temp.split("-");
 
   return (
-    <div className='headerComponent'>
+    <div className="headerComponent">
       {/* <span className="roomIdTextStyle">Room Id : {userData.roomId}</span> */}
-      
-      <div style={{display: "flex" , alignItems: "center"}}> 
-      <img className = "menuIconStyle" src="https://static.thenounproject.com/png/331097-200.png" style={{height: "35px", width: "35px" , margin: "0px 10px" , borderRadius: "5px" , backgroundColor: 'white',}}/>  
-      <button className='createGroupButton' onClick={()=>{
-            setShowPopUp(true);
-      }}>Create Group</button>
-      </div>
-      <span className="appName">SIGNAL</span>
-        
-        <ProfileCircle userName={userName[0]}  
-        
+
+      <div style={{ display: "flex", alignItems: "center" }}>
+        <img
+          className="menuIconStyle"
+          src="https://static.thenounproject.com/png/331097-200.png"
+          style={{
+            height: "35px",
+            width: "35px",
+            margin: "0px 10px",
+            borderRadius: "5px",
+            backgroundColor: "white",
+          }}
+          onClick={() => {}}
         />
+
+        <button
+          className="createGroupButton"
+          onClick={() => {
+            setShowPopUp(true);
+          }}
+        >
+          {prefixChatname[0] === "Room" ? "Add Friends" : "Create Group"}
+        </button>
+      </div>
+      {/* <span className="appName">SIGNAL</span> */}
+      <span className="appName">{currentChat?.name}</span>
+
+      <ProfileCircle />
     </div>
-  )
+  );
 }
 
-export default HeaderComponent
-
-
+export default HeaderComponent;
