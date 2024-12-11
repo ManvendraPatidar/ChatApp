@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import "./FriendListSection.css";
 import { MyContext } from "../../screens/HomePage/HomePage";
 // import { socket } from '../../screens/HomePage/HomePage';
-function FriendListSection({ tittle, list }) {
+function FriendListSection({ tittle, list, isRoom }) {
   const [members, setMembers] = useState([]);
   const { setCurrentChat } = useContext(MyContext);
 
@@ -15,7 +15,6 @@ function FriendListSection({ tittle, list }) {
       <span className="headingText">{tittle}</span>
       <div className="friendListStyle">
         {members.map((i, index) => {
-          // console.log("thi is last id ,",i);
           return (
             <div
               key={index}
@@ -27,16 +26,9 @@ function FriendListSection({ tittle, list }) {
                 justifyContent: "center",
               }}
               onClick={() => {
-                // console.log("clicked on ",i,i.name);
-                setCurrentChat({ id: i.userId, name: i.name });
-                localStorage.setItem(
-                  "currentChat",
-                  JSON.stringify({ id: i.userId, name: i.name })
-                );
+                updateCurrentList(i);
               }}
             >
-              {/* {i.split(".")[0]} */}
-              {/* {i.name} */}
               <span style={{ color: "#ff9800", fontSize: "20px" }}>
                 {i.name}
               </span>
@@ -59,9 +51,17 @@ function FriendListSection({ tittle, list }) {
           );
         })}
       </div>
-      {/* <div style={{width: "100%" ,margin: "20px 0px", height: "1px",backgroundColor: "#BABABA"}}></div> */}
     </div>
   );
+
+  function updateCurrentList(i) {
+    console.log(i);
+          setCurrentChat({ id: isRoom? i.roomId : i.userId, name: i.name });
+          localStorage.setItem(
+            "currentChat",
+            JSON.stringify({ id: isRoom? i.roomId :i.userId, name: i.name })
+          );
+  }
 }
 
 export default FriendListSection;

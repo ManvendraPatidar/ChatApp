@@ -9,6 +9,7 @@
     justify-content: center;
     align-items: center;
     top: 0px;   
+    overflow: hidden;
 }
 
 .containerBox{
@@ -25,19 +26,3 @@
     
 }
 
-.friendTile{
-    background-color: aqua;
-    margin: 5px 10px ;
-    padding: 10px;
-    display: flex;
-    flex-direction: column;
-    border-radius: 10px;
-}
-
-.inviteFriendListStyle{
-    max-height: 400px;
-    width: 100%;
-    margin: 20px;
-    overflow: scroll;
-    scrollbar-width: none;
-}

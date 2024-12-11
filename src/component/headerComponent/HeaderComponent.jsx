@@ -2,20 +2,27 @@ import React, { useContext, useEffect, useState } from "react";
 import "./headerComponent.css";
 import ProfileCircle from "../ProfileCircle/ProfileCircle.jsx";
 import { MyContext } from "../../screens/HomePage/HomePage.jsx";
+import { checkIsRoom } from "../../sevices/checkIsRoom.js";
+
 // import { socket } from '../../screens/HomePage/HomePage.jsx';
 
 function HeaderComponent() {
+
   const [members, setMembers] = useState([]);
-  const { setShowPopUp, currentChat } = useContext(MyContext);
+  const { setShowPopUp,setShowJoinRoomPopUp, setShowCreateRoomPopUp, currentChat } = useContext(MyContext);
+  const [isRoom,setIsRoom] = useState(false);
+   useEffect(()=>{
+       setIsRoom(checkIsRoom(currentChat.id ?? ""));
+   },[
+    currentChat.id
+   ])
+   
 
-  const temp = currentChat.id ?? "";
-  console.log("PreFix #100-->", temp);
-
-  const prefixChatname = temp.split("-");
+  // const isRoom = checkIsRoom(currentChat.id ?? ""); 
+ 
 
   return (
     <div className="headerComponent">
-      {/* <span className="roomIdTextStyle">Room Id : {userData.roomId}</span> */}
 
       <div style={{ display: "flex", alignItems: "center" }}>
         <img
@@ -28,23 +35,29 @@ function HeaderComponent() {
             borderRadius: "5px",
             backgroundColor: "white",
           }}
-          onClick={() => {}}
+          onClick={() => {
+
+          }}
         />
 
         <button
           className="createGroupButton"
           onClick={() => {
-            setShowPopUp(true);
+            
+             isRoom ? setShowJoinRoomPopUp(true): setShowCreateRoomPopUp(true);
+            // setShowPopUp(true);
           }}
         >
-          {prefixChatname[0] === "Room" ? "Add Friends" : "Create Group"}
+          {isRoom? "Add Friends" : "Create Group"}
         </button>
       </div>
       {/* <span className="appName">SIGNAL</span> */}
       <span className="appName">{currentChat?.name}</span>
 
       <ProfileCircle />
+    
     </div>
+    
   );
 }
 

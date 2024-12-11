@@ -1,14 +1,20 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "./InputSection.css";
 import { MyContext, socket } from "../../screens/HomePage/HomePage";
 
 function InputSection() {
   const { userData, currentChat, setCurrentChat } = useContext(MyContext);
   const [message, setMessage] = useState("");
+   
+   useEffect(()=>{
+    
+  console.log("---------#1001-->",currentChat.id);
+   },[])
 
   return (
-    <div id="inputsection">
+    <div  id="inputsection">
       <input
+        disabled = {currentChat.id ? false : true} 
         className="inputTextFeild"
         placeholder="Send a message"
         type="text"
@@ -35,9 +41,10 @@ function InputSection() {
   );
 
   function sendMessage() {
+    console.log("clicked")
     if (message.trim() != "") {
       socket.emit("sendDirectMessage", {
-        senderId: userData.userId,
+        senderId: userData?.userId,
         receiverId: currentChat.id,
         content: message,
       });

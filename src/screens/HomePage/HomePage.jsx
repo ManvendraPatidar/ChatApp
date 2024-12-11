@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from "react";
 import "./HomePage.css";
-import ChatScreen from "../ChatScreen";
+
 import SideBarSection from "../SideBarSection/SideBarSection";
-import PopUp from "../../component/PopUpComponent/popUp";
+// import PopUp from "../../component/PopUpComponent/popUp";
 
 import LoginModel from "../../component/LoginModel/loginModel";
 import { io } from "socket.io-client";
+import ChatScreen from "../ChatScreenComponent/ChatScreen";
+import CreateRoomPopUp from "../../popUpContent/CreateRoomPopUp/createRoomPopUp";
+import PopUp from "../../component/PopUpComponent/PopUp";
+import JoinRoomPopUp from "../../popUpContent/JoinRoomPopUp/JoinRoomPopUp";
 
-export const BASEURL = "http://192.168.100.117:5000";
+export const BASEURL = "http://192.168.100.113:5000";
 
 export const socket = io(BASEURL);
 
@@ -20,7 +24,9 @@ export const MyContext = React.createContext({});
 function HomePage() {
   const [userData, setUserData] = useState({});
   const [showLoginModel, setShowLoginModel] = useState(true);
-  const [showPopUp, setShowPopUp] = useState(false);
+
+  const [showCreateRoomPopUp,setShowCreateRoomPopUp] =  useState(false);
+  const [showJoinRoomPopUp,setShowJoinRoomPopUp] = useState(false);
   const [currentChat, setCurrentChat] = useState({});
 
   useEffect(() => {
@@ -40,7 +46,6 @@ function HomePage() {
     const currentChat = localStorage.getItem("currentChat");
 
     const cc = JSON.parse(currentChat);
-    // console.log("this is log",currentChat)
     if (cc) {
       setCurrentChat(cc);
     } else {
@@ -49,7 +54,7 @@ function HomePage() {
     }
   }, []);
 
-  // console.log("changinggggggg ....... #1");
+
   useEffect(() => {
     console.log("changeeeee edetected ");
 
@@ -66,21 +71,28 @@ function HomePage() {
         currentChat,
         setCurrentChat,
         setUserData,
-        setShowPopUp,
+        setShowCreateRoomPopUp,
+        setShowJoinRoomPopUp
       }}
     >
       <div className="parentContainer">
         {showLoginModel ? (
           <LoginModel setShowLoginModel={setShowLoginModel} />
         ) : (
-          // false?
           <div className="container">
             <SideBarSection />
             <ChatScreen />
           </div>
         )}
 
-        {showPopUp ? <PopUp /> : <div />}
+        {/* {showPopUp ? <PopUp  /> : <> </>} */}
+        {
+          showCreateRoomPopUp ? <PopUp Component = {<CreateRoomPopUp/>} setShowPopUp={setShowCreateRoomPopUp} /> : <></>
+        }
+        {
+          showJoinRoomPopUp ? <PopUp Component = {<JoinRoomPopUp/>} setShowPopUp={setShowJoinRoomPopUp} /> : <></>
+        }
+
       </div>
     </MyContext.Provider>
   );
