@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import "./ChatDiv.css"
-import { MyContext, socket } from '../../screens/HomePage/HomePage';
+import { MyContext} from '../../screens/HomePage/HomePage';
 import ChatTile from '../ChatTileComponent/ChatTile';
 
 function ChatDiv() {
@@ -12,9 +12,9 @@ function ChatDiv() {
     const chatEndRef = useRef(null);
 
 
-        socket.on("roomMessages", (e) => {
-            setMessage(e);
-        })
+        // socket.on("roomMessages", (e) => {
+        //     setMessage(e);
+        // })
 
 
     useEffect(() => {
@@ -24,16 +24,16 @@ function ChatDiv() {
     }, [message]);
 
 
-    socket.on("newMessage", (e) => {
-        // console.log("new Message ", e);
+    // socket.on("newMessage", (e) => {
+    //     // console.log("new Message ", e);
 
-        // message.push(e);
-        const tempArray = [...message];
-        tempArray.push(e);
-        setMessage(tempArray);
+    //     // message.push(e);
+    //     const tempArray = [...message];
+    //     tempArray.push(e);
+    //     setMessage(tempArray);
 
 
-    })
+    // })
 
 
     return (

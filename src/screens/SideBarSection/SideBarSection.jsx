@@ -1,32 +1,26 @@
 import React, { useContext, useEffect, useState } from 'react'
 import "./SideBarSection.css"
 import "../../component/headerComponent/HeaderComponent.css"
-import { MyContext, socket } from '../HomePage/HomePage';
+import { BASEURL, MyContext} from '../HomePage/HomePage';
 import FriendListSection from '../../component/FriendListSection/FriendListSection';
+import axios from 'axios';
 function SideBarSection() {
 
-  const friendList = [0,1,3,4,5,6];
+  // const friendList = [0,1,3,4,5,6];
 
+  const [friendList , setFriendList] = useState([]);
   const { userData } = useContext(MyContext);
   const [isSearch , setIsSearch ] = useState(false);
-
-
-  socket.on("roomUsers",(e)=>{
-    // console.log(" room users ",e);
-
-    const temp = e.filter((i) => {
-      return i != userData.userId;
-    })
-
-    // console.log("______--->>",e)
-    setMembers(temp);
-  })
    
+  useEffect(()=>{
+    fetchFriendList();
+  },[]) 
+  
 
   return (
 
 
-    <div className='friendListSectionStyle'>
+    <div className='sideBarStyle'>
         <div className= {`headerComponent appName`} style={{fontSize:  18}} >
              <div className='searchDivStyle' style={{backgroundColor : isSearch ? "black" : "transparent"}} > 
                   <div style={{display: 'flex' , alignItems: "center"}}> 
@@ -65,13 +59,34 @@ function SideBarSection() {
              </div>
             
         </div>
-         <FriendListSection tittle={"Friend List"}/>
+         <FriendListSection tittle={"Friends"} list={friendList}/>
+
             <div style={{width: "100%" ,margin: "20px 0px", height: "1px",backgroundColor: "#BABABA"}}></div>
-         <FriendListSection tittle={"Group List"}/>
+         
+         <FriendListSection tittle={"Groups"} list={friendList} />
          {/* <span className='headingText'>Group List</span>         */}
     </div>
        
   )
+  
+ function fetchFriendList()
+  {
+      axios.get(BASEURL+"/getAllRegUsers").then((res)=>{
+   
+      if(res.status === 200)
+        {
+          const tempArray = res.data.users;
+          console.log("---dtaa-->",tempArray);   
+          setFriendList(tempArray);
+        } 
+   
+    }).catch(
+      (err)=>{
+        console.log("errror -----> ",err);
+      }
+     )
+  }
+
 }
 
 export default SideBarSection

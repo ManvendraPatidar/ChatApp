@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react'
 import "./InputSection.css";
-import { MyContext, socket } from '../../screens/HomePage/HomePage';
+import { MyContext, } from '../../screens/HomePage/HomePage';
 
 function InputSection() {
 
@@ -24,7 +24,7 @@ function InputSection() {
 
       if(message.trim() != "")
       {
-        socket.emit("sendMessage",{roomId: userData.roomId,userId: userData.userId,message: message})
+        // socket.emit("sendMessage",{roomId: userData.roomId,userId: userData.userId,message: message})
 
       }
       setMessage("");

@@ -1,83 +1,153 @@
 import { useContext, useState } from "react"
 import "./LoginModel.css"
-import { MyContext, socket } from "../../screens/HomePage/HomePage";
+import { BASEURL, MyContext } from "../../screens/HomePage/HomePage";
 import "../headerComponent/HeaderComponent.css";
-function LoginModel({ showModel }) {
+import axios from "axios";
+function LoginModel({ setShowLoginModel }) {
 
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
+  const [password, setPassword] = useState("");
   const [isLogin, setIsLogin] = useState(true);
 
-  const { setUserData } = useContext(MyContext);
 
   return (
     <div className="loginModel" >
-     <span className="appName">SIGNAL</span>
+      <span className="appName">SIGNAL</span>
       <div className="LoginCard">
         <span className="name" >  {isLogin ? "Log In" : "Sign Up"}</span>
-        <input placeholder="Email Address" className="inputClass" value={email} onChange={(n) => { onNameChange(n, "name") }}></input>
-        {
-          isLogin ?  <div/>:<input placeholder="Enter you Name" className="inputClass" value={name} onChange={(n) => { onNameChange(n, "room") }} /> 
+        <input placeholder="Email Address" className="inputClass" type="email" value={email} onChange={(n) => { setEmail(n.target.value) }} />
 
+        {
+          isLogin ? <div /> : <input placeholder="Enter you Name" className="inputClass" value={name} onChange={(n) => { setName(n.target.value) }} />
         }
-        <button className="button" style={{margin: "10px 0px 20px 0px" ,}} onClick={isLogin? onLogin : onSignUp} >{isLogin?"Start Chat":"Create Account"}</button>
-      
-        <span className="signupButton" onClick={()=>{setIsLogin(!isLogin)}}>{isLogin?"Create new Account" :"Already have an Account"}</span>
+        <input placeholder="Password" type={"password"} className="inputClass" value={password} onChange={(n) => { setPassword(n.target.value) }}></input>
+
+        <button className="button" style={{ margin: "10px 0px 20px 0px", }} onClick={isLogin ? onLogin : onSignUp} >{isLogin ? "Start Chat" : "Create Account"}</button>
+
+        <span className="signupButton" onClick={() => {
+          setEmail("");
+          setPassword("");
+          setName("");
+          setIsLogin(!isLogin)
+        }}>
+          {isLogin ? "Create new Account" : "Already have an Account"}</span>
       </div>
     </div>
   )
 
-  function onNameChange(n, id) {
-    if (id === "name") {
-      // console.log(n.target.value);
-      setEmail(n.target.value)
+
+  function onLogin() {
+    if (password.trim() == "") {
+      alert("Password must not be empty !!");
+      return;
     }
-    else if (id === "room") {
-    
-      setName(n.target.value);
+
+    if (isValidEmail(email)) {
+      const data = {
+        email: email,
+        password: password,
+      }
+
+      console.log("loging with ", email, password);
+
+      axios.post(BASEURL + "/loginUser", data, {
+        headers: {
+          "Content-Type": 'application/json',
+        }
+      }).then((res) => {
+        // console.log("------>>>",res.status);
+
+        if (res.status === 200) {
+          console.log(res.data);
+          const responseData = JSON.stringify(res.data);
+          localStorage.setItem('userData', responseData);    //seting in local db 
+          // setIsLogin(false);
+
+
+          setShowLoginModel(false);
+          setEmail("");
+          setPassword("");
+          setName("");
+
+        }
+
+
+      }).catch(err => {
+
+        console.log("Error --- >", err.status);
+        if (err.status === 401) {
+          alert("Incorrect Email or Password");
+        }
+
+
+      })
+
+    }
+    else {
+      alert("Please Enter a valid email");
+    }
+
+  }
+
+
+  function onSignUp() {
+
+    if (password.trim() == "") {
+      alert("Password must not be empty !!");
+      return;
+    }
+
+    if (name.trim() == "") {
+      alert("Name must not be empty !!");
+      return;
+    }
+
+    if (isValidEmail(email)) {
+      const data = {
+        name: name,
+        email: email,
+        password: password
+      };
+
+      axios.post(BASEURL + "/registerUser", data, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+        .then(response => {
+          console.log(response);
+          console.log(response.status);
+
+          if (response.status === 200) {
+            console.log(response.data);
+            // const responseData = response.data;
+            // console.log("getting ... ",response.data.userId); 
+
+
+            setEmail("");
+            setPassword("");
+            setName("");
+
+            setIsLogin(true);
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error); // Handle error
+          alert("Seem's like unstable Network try again later.....")
+        });
+    }
+    else {
+      alert("Please Enter a valid email");
     }
   }
+}
 
-
-  // function onSubmit() {
-
-
-  //   // message.trim() != ""
-    
-  //   socket.emit("joinRoom", { roomId: roomId, userId: name });
-    
-  //   socket.on("currentUserID", (e) => {
-  //     const user = localStorage.getItem("user");
-
-  //     if (user === null) {
-  //       const userId = e;
-  //       const obj = { roomId: roomId, userName: name, userId: userId };
-
-  //       localStorage.setItem("user", JSON.stringify(obj));
-  //       setUserData(obj);
-    
-  //     }
-  //     showModel(true);
-
-  //   })
-
-
-  // }
-
-  function onLogin()
-  {
-     console.log("Login with the email ",email);
-  }
-
-
-  function onSignUp(){
-    console.log("Sign Up with the email ",email);
-
-    console.log("Sign upwith the name ",name);
-
-  }
-
-
+function isValidEmail(email) {
+  return true;
+  // Regular expression to validate email format
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
 }
 
 
