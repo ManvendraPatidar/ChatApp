@@ -6,18 +6,17 @@ import { checkIsRoom } from "../../sevices/checkIsRoom";
 function InputSection() {
   const { userData, currentChat, setCurrentChat } = useContext(MyContext);
   const [message, setMessage] = useState("");
-  const [isRoom,setIsRoom] = useState(false);
+  const [isRoom, setIsRoom] = useState(false);
 
-   useEffect(()=>{
-   
-  setIsRoom(checkIsRoom(currentChat.id ?? ""));
-   console.log("---------#1001-->",);
-   },[currentChat.id])
+  useEffect(() => {
+    setIsRoom(checkIsRoom(currentChat.id ?? ""));
+    console.log("---------#1001-->");
+  }, [currentChat.id]);
 
   return (
-    <div  id="inputsection">
+    <div id="inputsection">
       <input
-        disabled = {currentChat.id ? false : true} 
+        disabled={currentChat.id ? false : true}
         className="inputTextFeild"
         placeholder="Send a message"
         type="text"
@@ -30,7 +29,7 @@ function InputSection() {
         }}
       />
       <img
-        onClick={isRoom? sendRooomMessage:sendMessage}
+        onClick={isRoom ? sendRooomMessage : sendMessage}
         style={{
           height: 35,
           backgroundColor: "white",
@@ -44,7 +43,7 @@ function InputSection() {
   );
 
   function sendMessage() {
-    console.log("clicked")
+    console.log("clicked");
     if (message.trim() != "") {
       socket.emit("sendDirectMessage", {
         senderId: userData?.userId,
@@ -55,10 +54,8 @@ function InputSection() {
     setMessage("");
   }
 
-
-  function sendRooomMessage()
-  {
-    console.log("clicked")
+  function sendRooomMessage() {
+    console.log("clicked");
     if (message.trim() != "") {
       socket.emit("sendRoomMessage", {
         senderId: userData?.userId,
@@ -66,7 +63,7 @@ function InputSection() {
         content: message,
       });
     }
-    setMessage("");    
+    setMessage("");
   }
 }
 

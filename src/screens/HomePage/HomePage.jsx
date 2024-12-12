@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import "./HomePage.css";
 
 import SideBarSection from "../SideBarSection/SideBarSection";
-// import PopUp from "../../component/PopUpComponent/popUp";
 
 import LoginModel from "../../component/LoginModel/loginModel";
 import { io } from "socket.io-client";
@@ -16,7 +15,7 @@ export const BASEURL = "http://192.168.101.18:5000";
 export const socket = io(BASEURL);
 
 socket.on("connect", () => {
-  console.log("Connectedd !", socket.id); // x8WIv7-mJelg7on_ALbx
+  console.log("Connectedd !", socket.id);
 });
 
 export const MyContext = React.createContext({});
@@ -25,8 +24,8 @@ function HomePage() {
   const [userData, setUserData] = useState({});
   const [showLoginModel, setShowLoginModel] = useState(true);
 
-  const [showCreateRoomPopUp,setShowCreateRoomPopUp] =  useState(false);
-  const [showJoinRoomPopUp,setShowJoinRoomPopUp] = useState(false);
+  const [showCreateRoomPopUp, setShowCreateRoomPopUp] = useState(false);
+  const [showJoinRoomPopUp, setShowJoinRoomPopUp] = useState(false);
   const [currentChat, setCurrentChat] = useState({});
 
   useEffect(() => {
@@ -42,7 +41,6 @@ function HomePage() {
       setShowLoginModel(true);
     }
 
-    //checking room
     const currentChat = localStorage.getItem("currentChat");
 
     const cc = JSON.parse(currentChat);
@@ -53,7 +51,6 @@ function HomePage() {
       setCurrentChat({});
     }
   }, []);
-
 
   useEffect(() => {
     console.log("changeeeee edetected ");
@@ -72,7 +69,7 @@ function HomePage() {
         setCurrentChat,
         setUserData,
         setShowCreateRoomPopUp,
-        setShowJoinRoomPopUp
+        setShowJoinRoomPopUp,
       }}
     >
       <div className="parentContainer">
@@ -85,14 +82,22 @@ function HomePage() {
           </div>
         )}
 
-        {/* {showPopUp ? <PopUp  /> : <> </>} */}
-        {
-          showCreateRoomPopUp ? <PopUp Component = {<CreateRoomPopUp/>} setShowPopUp={setShowCreateRoomPopUp} /> : <></>
-        }
-        {
-          showJoinRoomPopUp ? <PopUp Component = {<JoinRoomPopUp/>} setShowPopUp={setShowJoinRoomPopUp} /> : <></>
-        }
-
+        {showCreateRoomPopUp ? (
+          <PopUp
+            Component={<CreateRoomPopUp />}
+            setShowPopUp={setShowCreateRoomPopUp}
+          />
+        ) : (
+          <></>
+        )}
+        {showJoinRoomPopUp ? (
+          <PopUp
+            Component={<JoinRoomPopUp />}
+            setShowPopUp={setShowJoinRoomPopUp}
+          />
+        ) : (
+          <></>
+        )}
       </div>
     </MyContext.Provider>
   );
@@ -100,7 +105,6 @@ function HomePage() {
 
 function fetchUserDetails() {
   const user = localStorage.getItem("userData");
-  // console.log("user",JSON.parse(user));
 
   if (user) {
     return JSON.parse(user);

@@ -15,7 +15,5 @@ export async function fetchFriendList() {
         console.log("errror -----> ", err);
 
     }
-
-  // console.log("errror -----> ", tempArray);
   return tempArray;
 }

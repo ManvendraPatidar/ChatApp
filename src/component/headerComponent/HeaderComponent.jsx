@@ -4,26 +4,21 @@ import ProfileCircle from "../ProfileCircle/ProfileCircle.jsx";
 import { MyContext } from "../../screens/HomePage/HomePage.jsx";
 import { checkIsRoom } from "../../sevices/checkIsRoom.js";
 
-// import { socket } from '../../screens/HomePage/HomePage.jsx';
-
 function HeaderComponent() {
-
   const [members, setMembers] = useState([]);
-  const { setShowPopUp,setShowJoinRoomPopUp, setShowCreateRoomPopUp, currentChat } = useContext(MyContext);
-  const [isRoom,setIsRoom] = useState(false);
-   useEffect(()=>{
-       setIsRoom(checkIsRoom(currentChat.id ?? ""));
-   },[
-    currentChat.id
-   ])
-   
-
-  // const isRoom = checkIsRoom(currentChat.id ?? ""); 
- 
+  const {
+    setShowPopUp,
+    setShowJoinRoomPopUp,
+    setShowCreateRoomPopUp,
+    currentChat,
+  } = useContext(MyContext);
+  const [isRoom, setIsRoom] = useState(false);
+  useEffect(() => {
+    setIsRoom(checkIsRoom(currentChat.id ?? ""));
+  }, [currentChat.id]);
 
   return (
     <div className="headerComponent">
-
       <div style={{ display: "flex", alignItems: "center" }}>
         <img
           className="menuIconStyle"
@@ -35,29 +30,26 @@ function HeaderComponent() {
             borderRadius: "5px",
             backgroundColor: "white",
           }}
-          onClick={() => {
-
-          }}
+          onClick={() => {}}
         />
 
-       {
-        isRoom ?  <button
-        className="createGroupButton"
-        onClick={() => {
-          
-            setShowJoinRoomPopUp(true)
-        }}
-      >
-        Add Friends         </button>:<></>
-       }
+        {isRoom ? (
+          <button
+            className="createGroupButton"
+            onClick={() => {
+              setShowJoinRoomPopUp(true);
+            }}
+          >
+            Add Friends{" "}
+          </button>
+        ) : (
+          <></>
+        )}
       </div>
-      {/* <span className="appName">SIGNAL</span> */}
       <span className="appName">{currentChat?.name}</span>
 
       <ProfileCircle />
-    
     </div>
-    
   );
 }
 

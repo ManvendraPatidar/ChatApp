@@ -6,32 +6,31 @@ import FriendListSection from "../../component/FriendListSection/FriendListSecti
 import axios from "axios";
 import { fetchFriendList } from "../../sevices/API_SERVICES";
 function SideBarSection() {
-  // const friendList = [0,1,3,4,5,6];
-
   const [friendList, setFriendList] = useState([]);
   const [groupList, setGroupList] = useState([]);
-  const { userData ,setShowCreateRoomPopUp} = useContext(MyContext);
-  const [isSearch, setIsSearch] = useState(false);
+  const { userData, setShowCreateRoomPopUp } = useContext(MyContext);
+
   const [Fkey, setFkey] = useState(0);
   const [GKey, setGkey] = useState(0);
-  
-  useEffect(()=>{
-    
-    fetchFriendList().then((res)=>{
-      setFriendList(res);
-    }).catch((e)=>{
-      console.log("ERRORRR-----");
-    })
-
-  },[])
 
   useEffect(() => {
-    
-    fetchFriendList().then((res)=>{
-      setFriendList(res);
-    }).catch((e)=>{
-      console.log("ERRORRR-----");
-    })
+    fetchFriendList()
+      .then((res) => {
+        setFriendList(res);
+      })
+      .catch((e) => {
+        console.log("ERRORRR-----");
+      });
+  }, []);
+
+  useEffect(() => {
+    fetchFriendList()
+      .then((res) => {
+        setFriendList(res);
+      })
+      .catch((e) => {
+        console.log("ERRORRR-----");
+      });
 
     socket.emit("getAllJoinedRooms", {});
   }, [Fkey]);
@@ -50,22 +49,18 @@ function SideBarSection() {
     setGkey(GKey + 1);
   });
 
-  socket.on("addedToRoom",(res)=>{
+  socket.on("addedToRoom", (res) => {
     console.log(res);
     setGkey(GKey + 1);
-   })
-
+  });
 
   return (
     <div className="sideBarStyle">
       <div className={`headerComponent appName`} style={{ fontSize: 18 }}>
-
-      <button
+        <button
           className="createGroupButton"
           onClick={() => {
-            
-             setShowCreateRoomPopUp(true);
-            // setShowPopUp(true);
+            setShowCreateRoomPopUp(true);
           }}
         >
           Create Group
@@ -108,7 +103,7 @@ function SideBarSection() {
                   }
              </div> */}
       </div>
-      <FriendListSection tittle={"Friends"} list={friendList} isRoom = {false}  />
+      <FriendListSection tittle={"Friends"} list={friendList} isRoom={false} />
 
       <div
         style={{
@@ -119,7 +114,7 @@ function SideBarSection() {
         }}
       ></div>
 
-      <FriendListSection tittle={"Groups"} list={groupList} isRoom = {true}/>
+      <FriendListSection tittle={"Groups"} list={groupList} isRoom={true} />
     </div>
   );
 
@@ -139,20 +134,6 @@ function SideBarSection() {
         console.log("errror -----> ", err);
       });
   }
-
-  // function fetchFriendList() {
-  //   axios
-  //     .get(BASEURL + "/getAllRegUsers")
-  //     .then((res) => {
-  //       if (res.status === 200) {
-  //         const tempArray = res.data.users;
-  //         setFriendList(tempArray);
-  //       }
-  //     })
-  //     .catch((err) => {
-  //       console.log("errror -----> ", err);
-  //     });
-  // }
 }
 
 export default SideBarSection;

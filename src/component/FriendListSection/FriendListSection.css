@@ -5,8 +5,6 @@
     box-sizing: border-box;
     padding: 5px;
     background-color: white;
-    /* display: flex; */
-    /* flex-direction: column; */
     overflow-y: scroll;
     scrollbar-width: none;
 }
@@ -19,7 +17,6 @@
     width: 100%;
     display: flex;
     align-items: center;
-    /* justify-content: center; */
     box-sizing: border-box;
     padding: 0px 20px;
     border-radius: 5px;
@@ -30,11 +27,9 @@
 
 .headingText{
     height: 30px;
-    /* width: 90%; */
     display: flex;
    
    margin: 10px;
-    /* justify-content: center; */
     align-items: center;
     font-size: 20px;
     color: black;

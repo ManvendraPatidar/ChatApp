@@ -7,7 +7,6 @@ import InputSection from "../../component/InputSection/InputSection";
 
 
 function ChatScreen() {
-  // console.log(userData);
 
   return (
     <div className="chatContainer">

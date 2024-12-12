@@ -21,9 +21,6 @@ function ChatTile(props) {
             : "20px 0px 20px 20px",
         }}
       >
-        {
-          // !iscurrentUSer ?  <span style={{marginBottom: "20px",color: "aqua" }}>{data.userId.split(".")[0]}</span>: <div/>
-        }
         <span>{data.content}</span>
       </div>
     </div>

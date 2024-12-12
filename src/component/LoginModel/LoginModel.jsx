@@ -82,9 +82,6 @@ function LoginModel({ setShowLoginModel }) {
         email: email,
         password: password,
       };
-
-      // console.log("loging with ", email, password);
-
       axios
         .post(BASEURL + "/loginUser", data, {
           headers: {
@@ -92,13 +89,9 @@ function LoginModel({ setShowLoginModel }) {
           },
         })
         .then((res) => {
-          // console.log("------>>>",res.status);
-
           if (res.status === 200) {
-            // console.log(res.data);
             const responseData = JSON.stringify(res.data);
-            localStorage.setItem("userData", responseData); //seting in local db
-            // setIsLogin(false);
+            localStorage.setItem("userData", responseData);
 
             setUserData(res.data);
             setCurrentChat({});
@@ -145,8 +138,6 @@ function LoginModel({ setShowLoginModel }) {
         })
         .then((response) => {
           if (response.status === 200) {
-            
-
             setEmail("");
             setPassword("");
             setName("");
@@ -155,7 +146,7 @@ function LoginModel({ setShowLoginModel }) {
           }
         })
         .catch((error) => {
-          console.error("Error:", error); // Handle error
+          console.error("Error:", error);
           alert("Seem's like unstable Network try again later.....");
         });
     } else {
@@ -165,8 +156,6 @@ function LoginModel({ setShowLoginModel }) {
 }
 
 function isValidEmail(email) {
-  return true;
-  // Regular expression to validate email format
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(email);
 }

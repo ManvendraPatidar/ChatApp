@@ -11,25 +11,19 @@ function ChatDiv() {
   const [message, setMessage] = useState([]);
   const chatEndRef = useRef(null);
 
-  const [isRoom,setIsRoom] = useState(false);
+  const [isRoom, setIsRoom] = useState(false);
 
-   useEffect(()=>{
-       setIsRoom(checkIsRoom(currentChat.id ?? ""));
-   },[
-    currentChat.id
-   ])
-  
+  useEffect(() => {
+    setIsRoom(checkIsRoom(currentChat.id ?? ""));
+  }, [currentChat.id]);
 
   socket.on("newDirectMessage", (res) => {
     const newArray = [...message, res];
 
-    console.log(newArray);
     setMessage(newArray);
   });
 
-  socket.on("newMessage", (res) => {
-    console.log(res);
-  });
+  socket.on("newMessage", (res) => {});
 
   useEffect(() => {
     socket.emit("registerSocket", { userId: userData?.userId });
@@ -43,8 +37,6 @@ function ChatDiv() {
       chatEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [message]);
-
-  // style={{ justifyContent :  currentChat.id ||message.length > 0  ? "flex-start" : "center"}}
 
   return (
     <div
@@ -78,12 +70,11 @@ function ChatDiv() {
   );
 
   function fetchMessageHistory() {
-     
-    const data =  {
-        senderId: userData.userId,
-        receiverId: currentChat.id,
-        roomId: "",
-      };
+    const data = {
+      senderId: userData.userId,
+      receiverId: currentChat.id,
+      roomId: "",
+    };
 
     // const data = isRoom ? {
     //   senderId: userData.userId,
@@ -94,17 +85,14 @@ function ChatDiv() {
     //   receiverId: currentChat.id,
     //   roomId: "",
     // };
- 
-    console.log("Fetching messgae for room,",data);
-   
+
+    console.log("Fetching messgae for room,", data);
 
     axios
       .post(BASEURL + "/getPreviousMessages", data)
       .then((res) => {
-        // console.log("---dataa-->#23", res);
         if (res.status === 200) {
           const tempArray = res.data;
-          console.log("---dataa-->#24", res.data.messages);
           setMessage(res.data.messages);
         }
       })

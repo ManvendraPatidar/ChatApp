@@ -1,6 +1,5 @@
 .chatDiv{
     background-color: #D3D3D3;
-    /* background-color: blue; */
     scroll-snap-type: y mandatory;
     height : calc(100vh - 150px) ;
     display: flex;
@@ -9,6 +8,5 @@
     overflow-y: scroll;
     position: relative;
     scrollbar-width: none;
-
     align-items: center;
 }

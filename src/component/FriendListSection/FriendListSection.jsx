@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import "./FriendListSection.css";
 import { MyContext } from "../../screens/HomePage/HomePage";
-// import { socket } from '../../screens/HomePage/HomePage';
 function FriendListSection({ tittle, list, isRoom }) {
   const [members, setMembers] = useState([]);
   const { setCurrentChat } = useContext(MyContext);
@@ -56,11 +55,11 @@ function FriendListSection({ tittle, list, isRoom }) {
 
   function updateCurrentList(i) {
     console.log(i);
-          setCurrentChat({ id: isRoom? i.roomId : i.userId, name: i.name });
-          localStorage.setItem(
-            "currentChat",
-            JSON.stringify({ id: isRoom? i.roomId :i.userId, name: i.name })
-          );
+    setCurrentChat({ id: isRoom ? i.roomId : i.userId, name: i.name });
+    localStorage.setItem(
+      "currentChat",
+      JSON.stringify({ id: isRoom ? i.roomId : i.userId, name: i.name })
+    );
   }
 }
 

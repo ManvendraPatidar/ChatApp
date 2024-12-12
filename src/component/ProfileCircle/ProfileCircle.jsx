@@ -14,7 +14,6 @@ function ProfileCircle() {
       setUsername(text);
     }
   }, [userData]);
-  //  console.log("USERDATAAAAA :- ",username);
 
   return (
     <div
@@ -52,10 +51,8 @@ function ProfileCircle() {
             onClick={() => {
               console.log("Remove User from ");
 
-              setUserData(null); // If userData is already null, React won't trigger an update
+              setUserData(null);
               localStorage.clear();
-
-              // window.location.reload();
             }}
           >
             Logout
