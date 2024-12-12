@@ -1,95 +1,113 @@
-import React, { useEffect, useState } from 'react'
-import "./HomePage.css"
-import ChatScreen from '../ChatScreen'
-import SideBarSection from '../SideBarSection/SideBarSection'
-import PopUp from '../../component/PopUpComponent/popUp'
+import React, { useEffect, useState } from "react";
+import "./HomePage.css";
 
-import LoginModel from '../../component/LoginModel/loginModel';
+import SideBarSection from "../SideBarSection/SideBarSection";
+// import PopUp from "../../component/PopUpComponent/popUp";
 
+import LoginModel from "../../component/LoginModel/loginModel";
+import { io } from "socket.io-client";
+import ChatScreen from "../ChatScreenComponent/ChatScreen";
+import CreateRoomPopUp from "../../popUpContent/CreateRoomPopUp/createRoomPopUp";
+import PopUp from "../../component/PopUpComponent/PopUp";
+import JoinRoomPopUp from "../../popUpContent/JoinRoomPopUp/JoinRoomPopUp";
 
-export const BASEURL = "http://192.168.100.132:5000";
+export const BASEURL = "http://192.168.101.18:5000";
 
-// export const socket = io(URL);
+export const socket = io(BASEURL);
 
-// socket.on("connect", () => {
-//   // console.log("Connectedd !", socket.id); // x8WIv7-mJelg7on_ALbx
-// });
-
-
-// socket.on("sendMessage",(e)=>{
-//   // console.log("rec message ",e);
-// })
-   
+socket.on("connect", () => {
+  console.log("Connectedd !", socket.id); // x8WIv7-mJelg7on_ALbx
+});
 
 export const MyContext = React.createContext({});
 
-
 function HomePage() {
-
   const [userData, setUserData] = useState({});
   const [showLoginModel, setShowLoginModel] = useState(true);
-   const [showPopUp,setShowPopUp] = useState(false);
 
+  const [showCreateRoomPopUp,setShowCreateRoomPopUp] =  useState(false);
+  const [showJoinRoomPopUp,setShowJoinRoomPopUp] = useState(false);
+  const [currentChat, setCurrentChat] = useState({});
 
   useEffect(() => {
     const user = fetchUserDetails();
 
-    console.log("empty--->",user)
-    if(user.userId)
-    {
-      setUserData(user);
-      setShowLoginModel(false)
+    if (user.userId) {
+      const obj = user;
+
+      setUserData(obj);
+
+      setShowLoginModel(false);
+    } else {
+      setShowLoginModel(true);
     }
-    else{
-      setShowLoginModel(true)
+
+    //checking room
+    const currentChat = localStorage.getItem("currentChat");
+
+    const cc = JSON.parse(currentChat);
+    if (cc) {
+      setCurrentChat(cc);
+    } else {
+      console.log("ITS EMPTY");
+      setCurrentChat({});
     }
-  }, [])
+  }, []);
 
 
-  useEffect(()=>{
-    
-   console.log("changeeeee edetected ")
-   if(!userData){
-    setShowLoginModel(true);
-   }
-    
-  },[userData])
+  useEffect(() => {
+    console.log("changeeeee edetected ");
+
+    if (!userData) {
+      console.log("After update:", userData);
+      setShowLoginModel(true);
+    }
+  }, [userData]);
 
   return (
-    <MyContext.Provider value={{userData , setUserData ,setShowPopUp}}>
+    <MyContext.Provider
+      value={{
+        userData,
+        currentChat,
+        setCurrentChat,
+        setUserData,
+        setShowCreateRoomPopUp,
+        setShowJoinRoomPopUp
+      }}
+    >
+      <div className="parentContainer">
+        {showLoginModel ? (
+          <LoginModel setShowLoginModel={setShowLoginModel} />
+        ) : (
+          <div className="container">
+            <SideBarSection />
+            <ChatScreen />
+          </div>
+        )}
 
-    <div className='parentContainer'>
-     
-      { 
-        showLoginModel ? <LoginModel setShowLoginModel={setShowLoginModel} />:
-        // false?
-              <div className="container">
-                  <SideBarSection />
-                  <ChatScreen userData= {{userName :"Monty", userId: "Monty.122",roomId: "U90"}} />
- 
-              </div>
-      }
+        {/* {showPopUp ? <PopUp  /> : <> </>} */}
+        {
+          showCreateRoomPopUp ? <PopUp Component = {<CreateRoomPopUp/>} setShowPopUp={setShowCreateRoomPopUp} /> : <></>
+        }
+        {
+          showJoinRoomPopUp ? <PopUp Component = {<JoinRoomPopUp/>} setShowPopUp={setShowJoinRoomPopUp} /> : <></>
+        }
 
-                  {
-                  showPopUp ? <PopUp/> : <div/>
-                  }
-
-    </div>
-      </MyContext.Provider>
-  )
+      </div>
+    </MyContext.Provider>
+  );
 }
-
-
 
 function fetchUserDetails() {
   const user = localStorage.getItem("userData");
+  // console.log("user",JSON.parse(user));
+
   if (user) {
     return JSON.parse(user);
-  }
-  else {
-    console.log("returning 0")
+  } else {
+    console.log("returning 0");
     return {};
   }
 }
 
-export default HomePage
+export default HomePage;

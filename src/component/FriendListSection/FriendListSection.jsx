@@ -1,43 +1,67 @@
-import React, { useEffect, useState } from 'react'
-import "./FriendListSection.css"
-function FriendListSection({ tittle, list }) {
-
+import React, { useContext, useEffect, useState } from "react";
+import "./FriendListSection.css";
+import { MyContext } from "../../screens/HomePage/HomePage";
+// import { socket } from '../../screens/HomePage/HomePage';
+function FriendListSection({ tittle, list, isRoom }) {
   const [members, setMembers] = useState([]);
+  const { setCurrentChat } = useContext(MyContext);
 
   useEffect(() => {
     setMembers(list);
-    console.log("*****", list);
-  },)
-
+  });
 
   return (
     <div>
-      <span className='headingText'>{tittle}</span>
-      <div className='friendListStyle'>
-        {
-          members.map((i) => {
-            return <div key={"uni" + i} className='friendCardStyle' style={{ display: "flex", flexDirection: "column", alignItems: "start", justifyContent: "center" }}>
+      <span className="headingText">{tittle}</span>
+      <div className="friendListStyle">
+        {members.map((i, index) => {
+          return (
+            <div
+              key={index}
+              className="friendCardStyle"
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "start",
+                justifyContent: "center",
+              }}
+              onClick={() => {
+                updateCurrentList(i);
+              }}
+            >
+              <span style={{ color: "#ff9800", fontSize: "20px" }}>
+                {i.name}
+              </span>
 
-              {/* {i.split(".")[0]} */}
-              {/* {i.name} */}
-              <span style={{ color: "#ff9800", fontSize: "20px" }}>{i.name}</span>
-
-              {
-
-                tittle != "Groups" ?
-                  <span style={{ fontSize: "14px", color: "black", letterSpacing: "1px", fontWeight: "normal" }}>{i.email}</span>
-
-                  : <div />
-              }
-
+              {tittle != "Groups" ? (
+                <span
+                  style={{
+                    fontSize: "14px",
+                    color: "black",
+                    letterSpacing: "1px",
+                    fontWeight: "normal",
+                  }}
+                >
+                  {i.email}
+                </span>
+              ) : (
+                <div />
+              )}
             </div>
-          })
-        }
-
+          );
+        })}
       </div>
-      {/* <div style={{width: "100%" ,margin: "20px 0px", height: "1px",backgroundColor: "#BABABA"}}></div> */}
     </div>
-  )
+  );
+
+  function updateCurrentList(i) {
+    console.log(i);
+          setCurrentChat({ id: isRoom? i.roomId : i.userId, name: i.name });
+          localStorage.setItem(
+            "currentChat",
+            JSON.stringify({ id: isRoom? i.roomId :i.userId, name: i.name })
+          );
+  }
 }
 
-export default FriendListSection
+export default FriendListSection;

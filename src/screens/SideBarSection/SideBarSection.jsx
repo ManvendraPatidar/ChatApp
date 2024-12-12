@@ -1,28 +1,78 @@
-import React, { useContext, useEffect, useState } from 'react'
-import "./SideBarSection.css"
-import "../../component/headerComponent/HeaderComponent.css"
-import { BASEURL, MyContext} from '../HomePage/HomePage';
-import FriendListSection from '../../component/FriendListSection/FriendListSection';
-import axios from 'axios';
+import React, { useContext, useEffect, useState } from "react";
+import "./SideBarSection.css";
+import "../../component/headerComponent/HeaderComponent.css";
+import { BASEURL, MyContext, socket } from "../HomePage/HomePage";
+import FriendListSection from "../../component/FriendListSection/FriendListSection";
+import axios from "axios";
+import { fetchFriendList } from "../../sevices/API_SERVICES";
 function SideBarSection() {
-
   // const friendList = [0,1,3,4,5,6];
 
-  const [friendList , setFriendList] = useState([]);
-  const { userData } = useContext(MyContext);
-  const [isSearch , setIsSearch ] = useState(false);
-   
-  useEffect(()=>{
-    fetchFriendList();
-  },[]) 
+  const [friendList, setFriendList] = useState([]);
+  const [groupList, setGroupList] = useState([]);
+  const { userData ,setShowCreateRoomPopUp} = useContext(MyContext);
+  const [isSearch, setIsSearch] = useState(false);
+  const [Fkey, setFkey] = useState(0);
+  const [GKey, setGkey] = useState(0);
   
+  useEffect(()=>{
+    
+    fetchFriendList().then((res)=>{
+      setFriendList(res);
+    }).catch((e)=>{
+      console.log("ERRORRR-----");
+    })
+
+  },[])
+
+  useEffect(() => {
+    
+    fetchFriendList().then((res)=>{
+      setFriendList(res);
+    }).catch((e)=>{
+      console.log("ERRORRR-----");
+    })
+
+    socket.emit("getAllJoinedRooms", {});
+  }, [Fkey]);
+
+  useEffect(() => {
+    fetchGroupList();
+  }, [GKey]);
+
+  socket.on("allRegUsers", (res) => {
+    console.log(Fkey);
+    setFkey(Fkey + 1);
+  });
+
+  socket.on("roomCreated", (res) => {
+    console.log("ROOM CREAATEDD AND YOU ADDed", res);
+    setGkey(GKey + 1);
+  });
+
+  socket.on("addedToRoom",(res)=>{
+    console.log(res);
+    setGkey(GKey + 1);
+   })
+
 
   return (
+    <div className="sideBarStyle">
+      <div className={`headerComponent appName`} style={{ fontSize: 18 }}>
 
+      <button
+          className="createGroupButton"
+          onClick={() => {
+            
+             setShowCreateRoomPopUp(true);
+            // setShowPopUp(true);
+          }}
+        >
+          Create Group
+        </button>
 
-    <div className='sideBarStyle'>
-        <div className= {`headerComponent appName`} style={{fontSize:  18}} >
-             <div className='searchDivStyle' style={{backgroundColor : isSearch ? "black" : "transparent"}} > 
+        {/* search feature  */}
+        {/* <div className='searchDivStyle' style={{backgroundColor : isSearch ? "black" : "transparent"}} > 
                   <div style={{display: 'flex' , alignItems: "center"}}> 
                   <input className='searchStyle' placeholder='Search and Add friend'
                    onClick={()=>{
@@ -56,39 +106,53 @@ function SideBarSection() {
                   </div> : <div/>
 
                   }
-             </div>
-            
-        </div>
-         <FriendListSection tittle={"Friends"} list={friendList}/>
+             </div> */}
+      </div>
+      <FriendListSection tittle={"Friends"} list={friendList} isRoom = {false}  />
 
-            <div style={{width: "100%" ,margin: "20px 0px", height: "1px",backgroundColor: "#BABABA"}}></div>
-         
-         <FriendListSection tittle={"Groups"} list={friendList} />
-         {/* <span className='headingText'>Group List</span>         */}
+      <div
+        style={{
+          width: "100%",
+          margin: "20px 0px",
+          height: "1px",
+          backgroundColor: "#BABABA",
+        }}
+      ></div>
+
+      <FriendListSection tittle={"Groups"} list={groupList} isRoom = {true}/>
     </div>
-       
-  )
-  
- function fetchFriendList()
-  {
-      axios.get(BASEURL+"/getAllRegUsers").then((res)=>{
-   
-      if(res.status === 200)
-        {
-          const tempArray = res.data.users;
-          console.log("---dtaa-->",tempArray);   
-          setFriendList(tempArray);
-        } 
-   
-    }).catch(
-      (err)=>{
-        console.log("errror -----> ",err);
-      }
-     )
+  );
+
+  function fetchGroupList() {
+    console.log("CHALUUUUUUUUUUUUUU");
+    axios
+      .post(BASEURL + "/getAllJoinedRooms", {
+        userId: userData.userId,
+      })
+      .then((res) => {
+        if (res.status === 200) {
+          const tempArray = res.data.rooms;
+          setGroupList(tempArray);
+        }
+      })
+      .catch((err) => {
+        console.log("errror -----> ", err);
+      });
   }
 
+  // function fetchFriendList() {
+  //   axios
+  //     .get(BASEURL + "/getAllRegUsers")
+  //     .then((res) => {
+  //       if (res.status === 200) {
+  //         const tempArray = res.data.users;
+  //         setFriendList(tempArray);
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       console.log("errror -----> ", err);
+  //     });
+  // }
 }
 
-export default SideBarSection
-
-
+export default SideBarSection;

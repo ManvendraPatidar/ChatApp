@@ -1,43 +1,71 @@
-import React, { useContext, useState } from 'react'
-import './ProfileCircle.css'
-import "../headerComponent/HeaderComponent.css"
-import { MyContext } from '../../screens/HomePage/HomePage';
-function ProfileCircle({userName}) {
-
+import React, { useContext, useEffect, useState } from "react";
+import "./ProfileCircle.css";
+import "../headerComponent/HeaderComponent.css";
+import { MyContext } from "../../screens/HomePage/HomePage";
+function ProfileCircle() {
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
-  
-  const {setUserData} = useContext(MyContext);
-  return (
-  <div style={{flexDirection: "row" , boxSizing: "border-box", display: 'flex' , alignItems:"center"  , border: "1px solid white" , borderRadius: "50px"}}   onMouseEnter={() => setIsDropdownVisible(true)}
-  onMouseLeave={() => setIsDropdownVisible(false)}>
-   <div className='profileCircle'  
-      
-      >
-        <span className='appName'>{userName}</span>
-    </div>
-  
-  {/* {
-  isDropdownVisible ? <button onClick={()=>{console.log("Logout USer")}} className='logoutModel'>Logout my Account</button> :<div/>
-   } */}
-   
-   {
-    isDropdownVisible? <div className='logoutModel'> 
-     <span  style={{color: "black" , fontSize: "20px" , fontWeight: 700}}>Manvendra Patidar</span>
-    <div style={{width: "100%" ,margin: "20px 0px", height: "1px",backgroundColor: "#BABABA"}}></div>
-      
-      <div style={{fontSize: "20px" }} onClick={()=>{
-        // console.log("Remove User from ")
-       
-        setUserData(null);
-        localStorage.clear();
-      
-        // window.location.reload(); 
-      }}>Logout</div>
-    </div>: <div/>
-   }
 
-   </div>
-  )
+  const [username, setUsername] = useState("XXX");
+  const { userData, setUserData, setCurrentChat } = useContext(MyContext);
+
+  useEffect(() => {
+    if (userData) {
+      const text = userData?.name.toUpperCase();
+      setUsername(text);
+    }
+  }, [userData]);
+  //  console.log("USERDATAAAAA :- ",username);
+
+  return (
+    <div
+      style={{
+        flexDirection: "row",
+        boxSizing: "border-box",
+        display: "flex",
+        alignItems: "center",
+        border: "1px solid white",
+        borderRadius: "50px",
+      }}
+      onMouseEnter={() => setIsDropdownVisible(true)}
+      onMouseLeave={() => setIsDropdownVisible(false)}
+    >
+      <div className="profileCircle">
+        <span className="appName">{username[0]}</span>
+      </div>
+
+      {isDropdownVisible ? (
+        <div className="logoutModel">
+          <span style={{ color: "black", fontSize: "20px", fontWeight: 700 }}>
+            {username}
+          </span>
+          <div
+            style={{
+              width: "100%",
+              margin: "20px 0px",
+              height: "1px",
+              backgroundColor: "#BABABA",
+            }}
+          ></div>
+
+          <div
+            style={{ fontSize: "20px" }}
+            onClick={() => {
+              console.log("Remove User from ");
+
+              setUserData(null); // If userData is already null, React won't trigger an update
+              localStorage.clear();
+
+              // window.location.reload();
+            }}
+          >
+            Logout
+          </div>
+        </div>
+      ) : (
+        <div />
+      )}
+    </div>
+  );
 }
 
-export default ProfileCircle
+export default ProfileCircle;

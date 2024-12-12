@@ -1,30 +1,33 @@
-import React, { useContext, useState } from 'react'
-import "./popUp.css"
-import "../LoginModel/LoginModel.css"
-import { MyContext } from '../../screens/HomePage/HomePage';
+import React, { useContext, useEffect, useState } from "react";
+import "./popUp.css";
+import "../LoginModel/LoginModel.css";
+import { MyContext, socket } from "../../screens/HomePage/HomePage";
+import "../FriendListSection/FriendListSection.css";
+import CreateRoomPopUp from "../../popUpContent/CreateRoomPopUp/createRoomPopUp";
+import JoinRoomPopUp from "../../popUpContent/JoinRoomPopUp/JoinRoomPopUp";
 
-function PopUp() {
-   const [roomId,setRoomId] = useState(""); 
-    
-   const {setShowPopUp} = useContext(MyContext);
+function PopUp({Component ,setShowPopUp}) {
+  const { currentChat, userData } = useContext(MyContext);
+  const [isJoinRoom, setIsJoinRoom] = useState();
+  const [roomName, setRoomName] = useState("");
 
-    return (
-        <div className='popUpStyle' onClick={()=>{setShowPopUp(false)}}>
-            <div className='containerBox' onClick={(e)=>{e.stopPropagation()}}>
+  // useEffect(() => {
+  //   //  console.log("------>>>>>",currentChat)
+  //   const temp = currentChat.id ?? "";
+  //   const prefixChatname = temp.split("-");
+  //   setIsJoinRoom(prefixChatname[0] !== "Room"); // Update state based on logic
+  // }, [currentChat]); // Only re-run if currentChat changes
 
-                   <span>Enter the room number</span>
-   
-                   <input placeholder="Enter the room ID"  className="inputClass" value={roomId}  onChange={(n) => {setRoomId(n.target.value) }}></input>
-                   <button className="button" style={{ margin: "10px 0px 20px 0px", }} onClick={()=>{
-                    setShowPopUp(false)
-                    
-                    }}>Submit</button>
-
-
-
-            </div>
-        </div>
-    )
+  return (
+    <div
+      className="popUpStyle"
+      onClick={() => {
+        setShowPopUp(false);
+      }}
+    >
+      {Component}
+    </div>
+  );
 }
 
-export default PopUp
+export default PopUp;
