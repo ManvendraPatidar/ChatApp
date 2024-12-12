@@ -40,16 +40,16 @@ function HeaderComponent() {
           }}
         />
 
-        <button
-          className="createGroupButton"
-          onClick={() => {
-            
-             isRoom ? setShowJoinRoomPopUp(true): setShowCreateRoomPopUp(true);
-            // setShowPopUp(true);
-          }}
-        >
-          {isRoom? "Add Friends" : "Create Group"}
-        </button>
+       {
+        isRoom ?  <button
+        className="createGroupButton"
+        onClick={() => {
+          
+            setShowJoinRoomPopUp(true)
+        }}
+      >
+        Add Friends         </button>:<></>
+       }
       </div>
       {/* <span className="appName">SIGNAL</span> */}
       <span className="appName">{currentChat?.name}</span>

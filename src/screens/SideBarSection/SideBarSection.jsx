@@ -10,7 +10,7 @@ function SideBarSection() {
 
   const [friendList, setFriendList] = useState([]);
   const [groupList, setGroupList] = useState([]);
-  const { userData } = useContext(MyContext);
+  const { userData ,setShowCreateRoomPopUp} = useContext(MyContext);
   const [isSearch, setIsSearch] = useState(false);
   const [Fkey, setFkey] = useState(0);
   const [GKey, setGkey] = useState(0);
@@ -59,6 +59,18 @@ function SideBarSection() {
   return (
     <div className="sideBarStyle">
       <div className={`headerComponent appName`} style={{ fontSize: 18 }}>
+
+      <button
+          className="createGroupButton"
+          onClick={() => {
+            
+             setShowCreateRoomPopUp(true);
+            // setShowPopUp(true);
+          }}
+        >
+          Create Group
+        </button>
+
         {/* search feature  */}
         {/* <div className='searchDivStyle' style={{backgroundColor : isSearch ? "black" : "transparent"}} > 
                   <div style={{display: 'flex' , alignItems: "center"}}> 

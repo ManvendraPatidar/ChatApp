@@ -3,6 +3,7 @@ import "./ChatDiv.css";
 import { BASEURL, MyContext, socket } from "../../screens/HomePage/HomePage";
 import ChatTile from "../ChatTileComponent/ChatTile";
 import axios from "axios";
+import { checkIsRoom } from "../../sevices/checkIsRoom";
 
 function ChatDiv() {
   const { userData, currentChat, setCurrentChat } = useContext(MyContext);
@@ -10,11 +11,24 @@ function ChatDiv() {
   const [message, setMessage] = useState([]);
   const chatEndRef = useRef(null);
 
+  const [isRoom,setIsRoom] = useState(false);
+
+   useEffect(()=>{
+       setIsRoom(checkIsRoom(currentChat.id ?? ""));
+   },[
+    currentChat.id
+   ])
+  
+
   socket.on("newDirectMessage", (res) => {
     const newArray = [...message, res];
 
     console.log(newArray);
     setMessage(newArray);
+  });
+
+  socket.on("newMessage", (res) => {
+    console.log(res);
   });
 
   useEffect(() => {
@@ -30,35 +44,59 @@ function ChatDiv() {
     }
   }, [message]);
 
-
   // style={{ justifyContent :  currentChat.id ||message.length > 0  ? "flex-start" : "center"}}
 
   return (
-    <div className="chatDiv"   style={{ justifyContent :  message.length > 0  ? "flex-start" : "center" }}
->
-      
-      {
-        currentChat.id ?  message.length > 0 ?    
-        message.map((data, index) => {
-        return <ChatTile key={index} data={data} />;
-          }) : <span> your friend {currentChat.name} is waiting for your message </span>
-         :<span>Select person from left menu and start conversation with them. </span> 
-      }
-      
-    
-      
+    <div
+      className="chatDiv"
+      style={{ justifyContent: message.length > 0 ? "flex-start" : "center" }}
+    >
+      {currentChat.id ? (
+        message.length > 0 ? (
+          message.map((data, index) => {
+            return <ChatTile key={index} data={data} />;
+          })
+        ) : isRoom ? (
+          <span>
+            {" "}
+            Everyone in {currentChat.name} group is waiting for your message{" "}
+          </span>
+        ) : (
+          <span>
+            {" "}
+            your friend {currentChat.name} is waiting for your message{" "}
+          </span>
+        )
+      ) : (
+        <span>
+          Select person from left menu and start conversation with them.{" "}
+        </span>
+      )}
 
-     
       <div ref={chatEndRef} />
     </div>
   );
 
   function fetchMessageHistory() {
-    const data = {
-      senderId: userData.userId,
-      receiverId: currentChat.id,
-      roomId: "",
-    };
+     
+    const data =  {
+        senderId: userData.userId,
+        receiverId: currentChat.id,
+        roomId: "",
+      };
+
+    // const data = isRoom ? {
+    //   senderId: userData.userId,
+    //   receiverId: "",
+    //   roomId: currentChat.id,
+    // }:{
+    //   senderId: userData.userId,
+    //   receiverId: currentChat.id,
+    //   roomId: "",
+    // };
+ 
+    console.log("Fetching messgae for room,",data);
+   
 
     axios
       .post(BASEURL + "/getPreviousMessages", data)
@@ -66,7 +104,7 @@ function ChatDiv() {
         // console.log("---dataa-->#23", res);
         if (res.status === 200) {
           const tempArray = res.data;
-          // console.log("---dataa-->#24", res.data.messages);
+          console.log("---dataa-->#24", res.data.messages);
           setMessage(res.data.messages);
         }
       })

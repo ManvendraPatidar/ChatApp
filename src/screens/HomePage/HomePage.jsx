@@ -11,7 +11,7 @@ import CreateRoomPopUp from "../../popUpContent/CreateRoomPopUp/createRoomPopUp"
 import PopUp from "../../component/PopUpComponent/PopUp";
 import JoinRoomPopUp from "../../popUpContent/JoinRoomPopUp/JoinRoomPopUp";
 
-export const BASEURL = "http://192.168.100.113:5000";
+export const BASEURL = "http://192.168.101.18:5000";
 
 export const socket = io(BASEURL);
 

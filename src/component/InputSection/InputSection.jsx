@@ -1,15 +1,18 @@
 import React, { useContext, useEffect, useState } from "react";
 import "./InputSection.css";
 import { MyContext, socket } from "../../screens/HomePage/HomePage";
+import { checkIsRoom } from "../../sevices/checkIsRoom";
 
 function InputSection() {
   const { userData, currentChat, setCurrentChat } = useContext(MyContext);
   const [message, setMessage] = useState("");
-   
+  const [isRoom,setIsRoom] = useState(false);
+
    useEffect(()=>{
-    
-  console.log("---------#1001-->",currentChat.id);
-   },[])
+   
+  setIsRoom(checkIsRoom(currentChat.id ?? ""));
+   console.log("---------#1001-->",);
+   },[currentChat.id])
 
   return (
     <div  id="inputsection">
@@ -27,7 +30,7 @@ function InputSection() {
         }}
       />
       <img
-        onClick={sendMessage}
+        onClick={isRoom? sendRooomMessage:sendMessage}
         style={{
           height: 35,
           backgroundColor: "white",
@@ -50,6 +53,20 @@ function InputSection() {
       });
     }
     setMessage("");
+  }
+
+
+  function sendRooomMessage()
+  {
+    console.log("clicked")
+    if (message.trim() != "") {
+      socket.emit("sendRoomMessage", {
+        senderId: userData?.userId,
+        roomId: currentChat?.id,
+        content: message,
+      });
+    }
+    setMessage("");    
   }
 }
 
